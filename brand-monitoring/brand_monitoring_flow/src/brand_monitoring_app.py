@@ -52,17 +52,17 @@ def special_import():
     try:
         import brand_monitoring_flow.main
         from dotenv import load_dotenv
-        return True, None
+        return True, None, brand_monitoring_flow.main
     except RuntimeError as e:
         if "Your system has an unsupported version of sqlite3" in str(e):
-            return False, "SQLite version issue. Using simplified mode."
+            return False, "SQLite version issue. Using simplified mode.", None
         else:
-            return False, str(e)
+            return False, str(e), None
     except Exception as e:
-        return False, str(e)
+        return False, str(e), None
 
 # Try to import with our error handler
-success, error_message = special_import()
+success, error_message, brand_monitoring_flow_main = special_import()
 
 if not success:
     # Show a simplified version of the app if we can't load the main package
@@ -97,6 +97,7 @@ if not success:
     
 else:
     # If we've successfully imported everything, run the normal app
+    import brand_monitoring_flow.main
     from dotenv import load_dotenv
     
     # Load environment variables from .env file if available
